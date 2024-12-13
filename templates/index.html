@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+   <head>
+       <title>Book Recommender</title>
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+       <style>
+           body {
+               background: linear-gradient(135deg, #1d2671, #c33764);
+               color: white;
+               font-family: 'Arial', sans-serif;
+           }
+           .container {
+               background: rgba(0, 0, 0, 0.8);
+               border-radius: 20px;
+               padding: 20px;
+               box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+           }
+           h1 {
+               font-size: 2.5rem;
+               margin-bottom: 20px;
+               text-transform: uppercase;
+               letter-spacing: 2px;
+           }
+           .btn-primary {
+               background-color: #ff6347;
+               border: none;
+               font-size: 1rem;
+               padding: 10px 20px;
+               border-radius: 5px;
+               transition: background-color 0.3s ease;
+           }
+           .btn-primary:hover {
+               background-color: #e5533f;
+           }
+           .card {
+               background: #2e2e2e;
+               color: white;
+               border: none;
+               box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+           }
+           .card-title {
+               font-size: 1rem;
+               font-weight: bold;
+           }
+           label {
+               font-size: 1.1rem;
+           }
+       </style>
+   </head>
+   <body>
+       <div class="container my-3 mt-3">
+           <h1 class="text-center">Book Recommendation System</h1>
+
+            <form action="/recommend" method="POST" id="recommendation-form">
+                <div class="form-group">
+                    <label for="book-select">Select a Book:</label>
+                    <select class="form-control" id="book-select" name="selected_book">
+                        {% for book in book_list %}
+                            <option value="{{ book }}" {% if book == selected_book %}selected{% endif %}>{{ book }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Get Recommendations</button>
+            </form>
+
+            {% if book_list %}
+                <h2 class="mt-4">Recommended Books:</h2>
+                <div class="row">
+                    {% for i in range(recommended_book_titles|length) %}
+                        <div class="col-md-3">
+                            <div class="card mb-3">
+                                <img src="{{ recommended_book_posters[i] }}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ recommended_book_titles[i] }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <script>
+                // Remember the selected book
+                document.getElementById('book-select').addEventListener('change', function() {
+                    localStorage.setItem('selected_book', this.value);
+                });
+
+                // Set the selected book after page reload
+                document.addEventListener('DOMContentLoaded', function() {
+                    var selected_book = localStorage.getItem('selected_book');
+                    if (selected_book) {
+                        document.getElementById('book-select').value = selected_book;
+                    }
+                });
+            </script>
+       </div>
+
+       <!-- Optional JavaScript -->
+       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   </body>
+</html>
